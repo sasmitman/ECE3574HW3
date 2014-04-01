@@ -5,6 +5,10 @@
 #include <QSignalMapper>
 #include <QMessageBox>
 #include <QTextEdit>
+#include <QFile>
+#include <QList>
+#include <QTextStream>
+#include <cstdlib>
 
 MainWindow::~MainWindow()
 {
@@ -60,12 +64,12 @@ void MainWindow::checkValue (QString word)
 {
     if (word == "a")
     {
-        emit message(QString("Advising"));
+        emit message(getFortune());
     }
 
     if (word == "w")
     {
-        emit message(QString("Weather"));
+        emit message(QString("Weather:"));
     }
 
     if (word == "c"){
@@ -86,4 +90,24 @@ void MainWindow::exit()
     {
         qApp->quit();
     }
+}
+
+QString MainWindow::getFortune()
+{
+    int n = 0;//Count of how many lines
+    QList<QString> fortunes;
+    QString path = "fortune.dat";
+    QFile input(path);
+    input.open(QIODevice::ReadOnly);
+    QTextStream stream(&input);
+    //File is ready for reading
+    while (!stream.atEnd())
+    {
+        QString line = stream.readLine();
+        fortunes.append(line);
+        n = n+1;
+    }
+    input.close();//Close the file
+
+    return fortunes[rand()*n];
 }

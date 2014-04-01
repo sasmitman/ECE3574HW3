@@ -25,6 +25,9 @@ signals:
 
 private:
     Ui::MainWindow *ui;
+    QString getFortune();
+    QString getWeather();
+    QString getReminder();
 };
 
 #endif // MAINWINDOW_H
