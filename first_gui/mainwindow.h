@@ -14,6 +14,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
     ~MainWindow();
+    void exit();
 
 public slots:
     void checkValue(QString map); // After a button press

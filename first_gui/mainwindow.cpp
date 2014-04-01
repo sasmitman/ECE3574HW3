@@ -24,18 +24,32 @@ MainWindow::MainWindow()
     QTextEdit *myTextEdit = new QTextEdit("Welcome to this program");
     myLayout->addWidget(myTextEdit);
 
-    QPushButton* closeBtn = new QPushButton("Close");
-    myLayout->addWidget(closeBtn);
+    QPushButton* adviseBtn = new QPushButton("Advise");
+    myLayout->addWidget(adviseBtn);
 
-    QPushButton* dialogBtn = new QPushButton("Open Dialog Box!");
-    myLayout->addWidget(dialogBtn);
+    QPushButton* weatherBtn = new QPushButton("Weather");
+    myLayout->addWidget(weatherBtn);
+
+    QPushButton* reminderBtn = new QPushButton("Reminder");
+    myLayout->addWidget(reminderBtn);
+
+    QPushButton* closeBtn = new QPushButton("Quit");
+    myLayout->addWidget(closeBtn);
 
     //Mapping the signal to a slot map(). The parent of mySignal is QMainWindow object
     QSignalMapper *mySignal = new QSignalMapper(this);
-    connect(closeBtn, SIGNAL(clicked()), mySignal, SLOT(map()));
+
+    connect(adviseBtn, SIGNAL(clicked()), mySignal, SLOT(map()));//Signal for when advise is pressed
+    mySignal->setMapping(adviseBtn, "a");
+
+    connect(weatherBtn, SIGNAL(clicked()), mySignal, SLOT(map()));
+    mySignal->setMapping(weatherBtn, "w");
+
+    connect(reminderBtn, SIGNAL(clicked()), mySignal, SLOT(map()));//Signal for when reminder is pressed
+    mySignal->setMapping(reminderBtn, "d");
+
+    connect(closeBtn, SIGNAL(clicked()), mySignal, SLOT(map()));//Signal for when the close button is pressed
     mySignal->setMapping(closeBtn, "c");
-    connect(dialogBtn, SIGNAL(clicked()), mySignal, SLOT(map()));
-    mySignal->setMapping(dialogBtn, "d");
 
     //Mapping mapped(const QString &s) to checkValue(QString) slot
     connect(mySignal, SIGNAL(mapped(QString)), this, SLOT(checkValue(QString))); //For all the buttons
@@ -44,12 +58,32 @@ MainWindow::MainWindow()
 
 void MainWindow::checkValue (QString word)
 {
+    if (word == "a")
+    {
+        emit message(QString("Advising"));
+    }
+
+    if (word == "w")
+    {
+        emit message(QString("Weather"));
+    }
+
     if (word == "c"){
-        qApp->quit (); //Closes the MainWindow application Applied Software Design, Spring 2014
+        exit(); //Closes the MainWindow application
 
     }
     if (word == "d"){
-        QMessageBox::information(this, "Information", "This is a dialog box!");
-        //Opens a dialog box of information type with this message: “This a dialog box!”
+        QMessageBox::information(this, "Reminder", "This is a reminder!");
+        //Opens a dialog box of information type with this message: “This a reminder!”
+    }
+}
+
+void MainWindow::exit()
+{
+    QMessageBox::StandardButton popup;
+    popup = QMessageBox::question(this, "", "Are you sure you want to quit the program?", QMessageBox::Yes|QMessageBox::No);
+    if (popup == QMessageBox::Yes)
+    {
+        qApp->quit();
     }
 }
