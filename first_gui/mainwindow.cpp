@@ -80,7 +80,7 @@ void MainWindow::checkValue (QString word)
 
     }
     if (word == "d"){
-        QMessageBox::information(this, "Reminder", "This is a reminder!");
+        QMessageBox::information(this, "Reminder", getReminder());
         //Opens a dialog box of information type with this message: “This a reminder!”
     }
 }
@@ -181,3 +181,45 @@ QString MainWindow::getWeather()
     //qDebug()<<final.at(3);//Should be outputting
     return final[randInt(0,(final.size()-1))];
 }
+
+QString MainWindow::getReminder()
+{
+    QString temp, temp2;
+    QList<QString> reminder;
+    QList<QString> final;
+    QString path = "reminder.dat";
+    QFile input(path);
+    QTextStream stream(&input);
+    if (!input.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug()<<"Error: Could not find file";
+    }
+    //File is ready for reading
+    while (!stream.atEnd())
+    {
+        QString line;
+        line = stream.readLine();
+        reminder.append(line);
+    }
+    input.close();//Close the file
+    for (int i = 0; i<reminder.size(); i++)
+    {
+        qDebug()<<"Entered for loop";
+        temp = reminder.at(i);
+        if (temp.endsWith("\\"))
+        {
+            qDebug()<<"Entered if loop";
+            while (temp.endsWith("\\"))
+            {
+                qDebug()<<"Entered while loop";
+                temp.remove("\\");
+                temp = temp + " " +reminder.at(i+1);
+                i++;
+            }
+        }
+        final.append(temp);
+    }
+    //qDebug()<<final.at(3);//Should be outputting
+    return final[randInt(0,(final.size()-1))];
+}
+
