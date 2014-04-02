@@ -15,6 +15,7 @@ public:
     MainWindow();
     ~MainWindow();
     void exit();
+    int randInt(int low, int high);
 
 public slots:
     void checkValue(QString map); // After a button press
@@ -28,6 +29,7 @@ private:
     QString getFortune();
     QString getWeather();
     QString getReminder();
+    QStringList getStuff(QString name);
 };
 
 #endif // MAINWINDOW_H

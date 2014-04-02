@@ -7,8 +7,10 @@
 #include <QTextEdit>
 #include <QFile>
 #include <QList>
+#include <QStringList>
 #include <QTextStream>
-#include <cstdlib>
+#include <QDebug>
+#include <qglobal.h>
 
 MainWindow::~MainWindow()
 {
@@ -64,12 +66,13 @@ void MainWindow::checkValue (QString word)
 {
     if (word == "a")
     {
-        emit message(getFortune());
+        emit message("Advice: "+ getFortune());
+        qDebug()<<"Pressed button";
     }
 
     if (word == "w")
     {
-        emit message(QString("Weather:"));
+        emit message("Weather: "+getWeather());
     }
 
     if (word == "c"){
@@ -80,6 +83,11 @@ void MainWindow::checkValue (QString word)
         QMessageBox::information(this, "Reminder", "This is a reminder!");
         //Opens a dialog box of information type with this message: “This a reminder!”
     }
+}
+int MainWindow::randInt(int low, int high)
+{
+    // Random number between low and high
+    return qrand() % ((high + 1) - low) + low;
 }
 
 void MainWindow::exit()
@@ -94,20 +102,82 @@ void MainWindow::exit()
 
 QString MainWindow::getFortune()
 {
-    int n = 0;//Count of how many lines
+    QString temp, temp2;
+    QList<QString> final;
     QList<QString> fortunes;
     QString path = "fortune.dat";
     QFile input(path);
-    input.open(QIODevice::ReadOnly);
+    //input.open(QIODevice::ReadOnly);
     QTextStream stream(&input);
+    if (!input.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug()<<"Error: Could not find file";
+    }
     //File is ready for reading
     while (!stream.atEnd())
     {
         QString line = stream.readLine();
         fortunes.append(line);
-        n = n+1;
     }
     input.close();//Close the file
+    for (int i = 0; i<fortunes.size(); i++)
+    {
+        qDebug()<<"Entered for loop";
+        temp = fortunes.at(i);
+        if (temp.endsWith("\\"))
+        {
+            qDebug()<<"Entered if loop";
+            while (temp.endsWith("\\"))
+            {
+                qDebug()<<"Entered while loop";
+                temp.remove("\\");
+                temp = temp + " " +fortunes.at(i+1);
+                i++;
+            }
+        }
+        final.append(temp);
+    }
+    qDebug()<<final.at(3);//Should be outputting
+    return final[randInt(0,(final.size()-1))];
+}
 
-    return fortunes[rand()*n];
+QString MainWindow::getWeather()
+{
+    QString temp, temp2;
+    QList<QString> weather;
+    QList<QString> final;
+    QString path = "weather.dat";
+    QFile input(path);
+    QTextStream stream(&input);
+    if (!input.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug()<<"Error: Could not find file";
+    }
+    //File is ready for reading
+    while (!stream.atEnd())
+    {
+        QString line;
+        line = stream.readLine();
+        weather.append(line);
+    }
+    input.close();//Close the file
+    for (int i = 0; i<weather.size(); i++)
+    {
+        qDebug()<<"Entered for loop";
+        temp = weather.at(i);
+        if (temp.endsWith("\\"))
+        {
+            qDebug()<<"Entered if loop";
+            while (temp.endsWith("\\"))
+            {
+                qDebug()<<"Entered while loop";
+                temp.remove("\\");
+                temp = temp + " " +weather.at(i+1);
+                i++;
+            }
+        }
+        final.append(temp);
+    }
+    //qDebug()<<final.at(3);//Should be outputting
+    return final[randInt(0,(final.size()-1))];
 }
