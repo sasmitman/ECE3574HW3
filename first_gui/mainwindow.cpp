@@ -67,7 +67,6 @@ void MainWindow::checkValue (QString word)
     if (word == "a")
     {
         emit message("Advice: "+ getFortune());
-        qDebug()<<"Pressed button";
     }
 
     if (word == "w")
@@ -102,7 +101,7 @@ void MainWindow::exit()
 
 QString MainWindow::getFortune()
 {
-    QString temp, temp2;
+    QString temp;
     QList<QString> final;
     QList<QString> fortunes;
     QString path = "fortune.dat";
@@ -122,16 +121,18 @@ QString MainWindow::getFortune()
     input.close();//Close the file
     for (int i = 0; i<fortunes.size(); i++)
     {
-        qDebug()<<"Entered for loop";
+        //qDebug()<<"Entered for loop";
         temp = fortunes.at(i);
+        temp = temp.trimmed();
         if (temp.endsWith("\\"))
         {
-            qDebug()<<"Entered if loop";
+            //qDebug()<<"Entered if loop";
             while (temp.endsWith("\\"))
             {
-                qDebug()<<"Entered while loop";
+                // qDebug()<<"Entered while loop";
                 temp.remove("\\");
                 temp = temp + " " +fortunes.at(i+1);
+                temp = temp.trimmed();
                 i++;
             }
         }
@@ -143,7 +144,7 @@ QString MainWindow::getFortune()
 
 QString MainWindow::getWeather()
 {
-    QString temp, temp2;
+    QString temp;
     QList<QString> weather;
     QList<QString> final;
     QString path = "weather.dat";
@@ -163,16 +164,17 @@ QString MainWindow::getWeather()
     input.close();//Close the file
     for (int i = 0; i<weather.size(); i++)
     {
-        qDebug()<<"Entered for loop";
         temp = weather.at(i);
+        temp = temp.trimmed();
         if (temp.endsWith("\\"))
         {
-            qDebug()<<"Entered if loop";
+            //qDebug()<<"Entered if loop";
             while (temp.endsWith("\\"))
             {
-                qDebug()<<"Entered while loop";
+                // qDebug()<<"Entered while loop";
                 temp.remove("\\");
                 temp = temp + " " +weather.at(i+1);
+                temp = temp.trimmed();
                 i++;
             }
         }
@@ -184,7 +186,7 @@ QString MainWindow::getWeather()
 
 QString MainWindow::getReminder()
 {
-    QString temp, temp2;
+    QString temp;
     QList<QString> reminder;
     QList<QString> final;
     QString path = "reminder.dat";
@@ -204,16 +206,17 @@ QString MainWindow::getReminder()
     input.close();//Close the file
     for (int i = 0; i<reminder.size(); i++)
     {
-        qDebug()<<"Entered for loop";
         temp = reminder.at(i);
+        temp = temp.trimmed();
         if (temp.endsWith("\\"))
         {
-            qDebug()<<"Entered if loop";
+            //qDebug()<<"Entered if loop";
             while (temp.endsWith("\\"))
             {
-                qDebug()<<"Entered while loop";
+                // qDebug()<<"Entered while loop";
                 temp.remove("\\");
                 temp = temp + " " +reminder.at(i+1);
+                temp = temp.trimmed();
                 i++;
             }
         }
